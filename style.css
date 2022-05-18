@@ -1,0 +1,40 @@
+body {
+    background-color:lightgrey;
+}
+/* hack */
+input {
+    width:200px;
+    max-width:90%;
+}
+@keyframes fadeIn {
+    0% { opacity:0; }
+    100% { opacity:1; }
+}
+.question {
+    float:left;
+    width:calc(50% - 3px);
+    
+    opacity:0;
+    animation: fadeIn 1s 0s forwards;
+    
+}
+.guide, .question {
+    /* border:2px solid #000000; */
+    border-radius:20px;
+    
+    margin:0 2px 5px 0;
+    padding:10px;
+    
+    background-color:white;
+    box-sizing:border-box;
+}
+.guide, .text {
+    font-size:1.5em;
+}
+.header {
+    font-weight:bold;
+    font-size:2em;
+    line-height:1em;
+    margin-top:0.5em;
+    margin-bottom:-0.25em;
+}
