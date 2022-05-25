@@ -1,8 +1,7 @@
 /* eslint-disable */
 function rand(min, max)
 {
-    min -= 1;
-    return Math.round(Math.random()*(max-min)+min);
+    return Math.floor(Math.random()*(max-min)+min);
 }
 let operators = ["+", "-", "*", "ERROR"];
 
@@ -37,10 +36,10 @@ function make_1()
     let str = num.toString(2);
     while(str.length < 8)
         str = "0" + str;
-    equation = "0b"+str;
+    equation = ""+str;
     answer = String.fromCharCode(num);
 
-    return {equation, answer};
+    return {equation, answer, desc:"Convert binary to ascii"};
 }
 
 
@@ -87,12 +86,16 @@ function ui_for_question(i)
 {
     let div = document.createElement("div");
     div.classList.add("question");
-    document.body.appendChild(div);
     
     let questionNum = document.createElement("p");
     questionNum.classList.add("header");
     questionNum.innerHTML = "Question "+(i+1);
     div.appendChild(questionNum);
+
+    let desc = document.createElement("p");
+    desc.classList.add("text");
+    desc.innerHTML = questions[i].desc;
+    div.appendChild(desc);
     
     let equation = document.createElement("p");
     equation.classList.add("text");
@@ -104,6 +107,8 @@ function ui_for_question(i)
     input.addEventListener("input", input_changed);
     input.answer = questions[i].answer;
     div.appendChild(input);
+
+    document.body.appendChild(div);
 }
 function input_changed(evt)
 {
