@@ -22,24 +22,41 @@ function make_0()
 
     return {equation, answer};
 }
-function make_1()
+function gen_ascii()
 {
-    let equation, answer;
-    // String.fromCharCode();  "t".charCodeAt(0)
     let num = rand(0, 26);
     if (rand(0,2)==0)
         num += 97;
     else
         num += 65;
+    return num;
+}
+function make_1()
+{
+    let equation, answer;
+    let num = gen_ascii();
     
 
     let str = num.toString(2);
     while(str.length < 8)
         str = "0" + str;
-    equation = ""+str;
+    equation = str;
     answer = String.fromCharCode(num);
 
-    return {equation, answer, desc:"Convert binary to ascii"};
+    let choices = [];
+    for (let i = 0; i < 4; ++i)
+    {
+        let cur;
+        do cur = String.fromCharCode(gen_ascii());            
+        while (cur==answer || choices.includes(cur));
+        choices[i] = cur;
+    }
+    choices[rand(0,4)] = answer;
+    return {
+        equation, answer,
+        desc:"Convert binary to ascii",
+        choices
+    };
 }
 
 
@@ -84,6 +101,7 @@ function new_question()
 }
 function ui_for_question(i)
 {
+    let q = questions[i];
     let div = document.createElement("div");
     div.classList.add("question");
     
@@ -94,19 +112,50 @@ function ui_for_question(i)
 
     let desc = document.createElement("p");
     desc.classList.add("text");
-    desc.innerHTML = questions[i].desc;
+    desc.innerHTML = q.desc;
     div.appendChild(desc);
     
     let equation = document.createElement("p");
     equation.classList.add("text");
-    equation.innerHTML = questions[i].equation;
+    equation.innerHTML = q.equation;
     div.appendChild(equation);
     
-    let input = document.createElement("input");
-    input.placeholder = "Enter your answer here";
-    input.addEventListener("input", input_changed);
-    input.answer = questions[i].answer;
-    div.appendChild(input);
+    if (q.choices)
+    {
+        let choicesDiv = document.createElement("div");
+        choicesDiv.classList.add("choices");
+        choicesDiv.style.setProperty("--choiceWidth", (100.0/q.choices.length) + "%");
+        for (let i = 0; i < q.choices.length; ++i)
+        {
+            let choice = document.createElement("span");
+            choice.innerHTML = q.choices[i];
+            
+            choice.addEventListener("click", function()
+            {
+                if (choicesDiv.answered) return;
+                if (choice.innerHTML == q.answer)
+                    choice.style.backgroundColor = "#008000";
+                else
+                {
+                    choice.style.backgroundColor = "#800000";
+                    let index = q.choices.findIndex((e) => e==q.answer);
+                    choicesDiv.childNodes[index].style.backgroundColor = "#008000";
+                }
+                new_question();
+                choicesDiv.answered = true;
+            });
+            choicesDiv.appendChild(choice);
+        }
+        div.appendChild(choicesDiv);
+    }
+    else
+    {
+        let input = document.createElement("input");
+        input.placeholder = "Enter your answer here";
+        input.addEventListener("input", input_changed);
+        input.answer = q.answer;
+        div.appendChild(input);
+    }
 
     document.body.appendChild(div);
 }

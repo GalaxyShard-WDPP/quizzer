@@ -18,6 +18,28 @@ input {
     animation: fadeIn 1s 0s forwards;
     
 }
+.choices > span {
+    display:block;
+    float:left;
+    background-color:#007bff;
+    color:#ffffff;
+    width:calc(var(--choiceWidth) - 20px);
+    text-align:center;
+    padding:10px;
+    margin:10px;
+    box-sizing:border-box;
+    border-radius:10px;
+    font-size:1.5rem;
+    transition:background-color 0.2s;
+}
+.choices > span:hover {
+    background-color:#4000ff;
+}
+@media (max-width:767px) {
+    .question {
+        width:100%;
+    }
+}
 .guide, .question {
     /* border:2px solid #000000; */
     border-radius:20px;
